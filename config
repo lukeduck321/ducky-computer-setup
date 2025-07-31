@@ -7,6 +7,13 @@
 
 exec --no-startup-id caffeine
 
+# Open Firefox with Mod + b
+bindsym $mod+b exec firefox
+
+# Open qutebrowser with Mod + n
+bindsym $mod+n exec qutebrowser
+
+
 
 # i3 config file (v4)
 #
