@@ -6,6 +6,7 @@
 #
 
 exec --no-startup-id caffeine
+exec flameshot
 
 # Open Firefox with Mod + b
 bindsym $mod+b exec firefox
@@ -19,7 +20,7 @@ bindsym $mod+n exec qutebrowser
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-bindsym $mod+Shift+x exec i3lock
+bindsym $mod+Shift+x exec i3lock-fancy
 bindsym $mod+Shift+z exec "i3-nagbar -t warning -m 'Exit i3?' -b 'Yes, exit' 'i3-msg exit'"
 
 
