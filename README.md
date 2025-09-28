@@ -8,7 +8,7 @@ sudo apt install ./path/to/deb.deb
 
 might take a while
 
-sudo apt install caffeine openscad micro python3-full gdebi nemo htop i3lock-fancy
+sudo apt install caffeine openscad micro python3-full gdebi nemo htop
 
 install the discord with gdebi
 
