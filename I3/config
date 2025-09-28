@@ -8,7 +8,7 @@
 exec flameshot
 exec caffeine
 
-exec --no-startup-id xrandr --output HDMI-0 --primary --auto --output DP-1 --auto --right-of HDMI-0
+#exec --no-startup-id xrandr --output HDMI-0 --primary --auto --output DP-1 --auto --right-of HDMI-0
 
 
 exec --no-startup-id caffeine-indicator
@@ -178,9 +178,9 @@ bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcu
 
 
 # Assign workspaces to specific outputs
-workspace 1 output HDMI-0
+#workspace 1 output HDMI-0
 
-workspace 2 output DP-1
+#workspace 2 output DP-1
 
 
 # resize window (you can also use the mouse for that)
