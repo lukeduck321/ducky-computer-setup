@@ -5,8 +5,13 @@
 # this file and re-run i3-config-wizard(1).
 #
 
-exec --no-startup-id caffeine
 exec flameshot
+exec caffeine
+
+exec --no-startup-id xrandr --output HDMI-0 --primary --auto --output DP-1 --auto --right-of HDMI-0
+
+
+exec --no-startup-id caffeine-indicator
 
 # Open Firefox with Mod + b
 bindsym $mod+b exec firefox
@@ -14,13 +19,13 @@ bindsym $mod+b exec firefox
 # Open qutebrowser with Mod + n
 bindsym $mod+n exec qutebrowser
 
-
+bindsym $mod+q exec flameshot gui
 
 # i3 config file (v4)
 #
 # Please see https://i3wm.org/docs/userguide.html for a complete reference!
 
-bindsym $mod+Shift+x exec i3lock-fancy
+bindsym $mod+Shift+x exec i3lock
 bindsym $mod+Shift+z exec "i3-nagbar -t warning -m 'Exit i3?' -b 'Yes, exit' 'i3-msg exit'"
 
 
@@ -170,6 +175,13 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
+
+
+# Assign workspaces to specific outputs
+workspace 1 output HDMI-0
+
+workspace 2 output DP-1
+
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
