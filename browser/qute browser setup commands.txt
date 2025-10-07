@@ -13,13 +13,31 @@ sudo micro /home/ducky/.config/qutebrowser/greasemonkey/youtube-ads.js
 // @include *.youtube.com/*
 // ==/UserScript==
 
-document.addEventListener('load', () => {
-    const btn = document.querySelector('.videoAdUiSkipButton,.ytp-ad-skip-button-modern')
-    if (btn) {
-        btn.click()
+function skipAds() {
+    // Try to click skip button immediately
+    const skipBtn = document.querySelector('.ytp-ad-skip-button-modern, .videoAdUiSkipButton');
+    if (skipBtn) {
+        skipBtn.click();
+        return;
     }
-    const ad = [...document.querySelectorAll('.ad-showing')][0];
+    
+    // If ad is detected, mute and skip to near the end
+    const ad = document.querySelector('.ad-showing, .ad-interstitial, .ytp-ad-player-overlay');
     if (ad) {
-        document.querySelector('video').currentTime = 9999999999;
+        const video = document.querySelector('video');
+        if (video && video.duration) {
+            video.muted = true;
+            video.currentTime = video.duration - 0.1; // Skip to last 0.1 seconds
+        }
     }
-}, true);
+    
+    // Also try to close any ad overlays
+    const closeBtn = document.querySelector('.ytp-ad-overlay-close-button');
+    if (closeBtn) {
+        closeBtn.click();
+    }
+}
+
+// Check more frequently for faster skipping
+setInterval(skipAds, 250);
+
