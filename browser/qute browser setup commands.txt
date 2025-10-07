@@ -1,0 +1,25 @@
+hit : and put the folloung command
+
+:set colors.webpage.darkmode.enabled true
+
+create and set the file ising the path and put the js in for youtube adblock
+
+sudo micro /home/ducky/.config/qutebrowser/greasemonkey/youtube-ads.js
+
+// ==UserScript==
+// @name Skip YouTube ads
+// @description Skips the ads in YouTube videos
+// @run-at document-start
+// @include *.youtube.com/*
+// ==/UserScript==
+
+document.addEventListener('load', () => {
+    const btn = document.querySelector('.videoAdUiSkipButton,.ytp-ad-skip-button-modern')
+    if (btn) {
+        btn.click()
+    }
+    const ad = [...document.querySelectorAll('.ad-showing')][0];
+    if (ad) {
+        document.querySelector('video').currentTime = 9999999999;
+    }
+}, true);
