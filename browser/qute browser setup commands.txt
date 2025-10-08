@@ -41,3 +41,116 @@ function skipAds() {
 // Check more frequently for faster skipping
 setInterval(skipAds, 250);
 
+
+
+
+
+ sudo micro /home/ducky/.config/qutebrowser/greasemonkey/spotify-ads.js
+
+
+
+
+// ==UserScript==
+// @name Skip Spotify Ads
+// @description Skips all Spotify ads including Premium promos
+// @run-at document-start
+// @include https://open.spotify.com/*
+// ==/UserScript==
+
+function skipSpotifyAds() {
+    // Method 1: Look for any skip buttons
+    const skipSelectors = [
+        '[data-testid="ads-context-ad-skip-button"]',
+        'button[aria-label*="skip"]',
+        'button[class*="skip"]',
+        '.Button--skip',
+        'button:contains("Skip")'
+    ];
+    
+    for (const selector of skipSelectors) {
+        const btn = document.querySelector(selector);
+        if (btn && btn.offsetParent !== null) {
+            btn.click();
+            console.log('Clicked skip button:', selector);
+            return;
+        }
+    }
+    
+    // Method 2: Detect ads by duration (ads are usually 15-30 seconds)
+    const progressBar = document.querySelector('[data-testid="progress-bar"]');
+    const timeDisplay = document.querySelector('[data-testid="playback-position"]');
+    const durationDisplay = document.querySelector('[data-testid["playback-duration"]');
+    
+    if (progressBar && timeDisplay) {
+        const currentTime = timeDisplay.textContent;
+        const totalTime = durationDisplay ? durationDisplay.textContent : '';
+        
+        // If track is suspiciously short (15-31 seconds), it's likely an ad
+        if (totalTime && (totalTime === '0:15' || totalTime === '0:30' || totalTime === '0:31')) {
+            const nextBtn = document.querySelector('[data-testid="control-button-skip-forward"]');
+            if (nextBtn) {
+                nextBtn.click();
+                console.log('Skipped short ad track');
+                return;
+            }
+        }
+    }
+    
+    // Method 3: Look for ad indicators in the UI
+    const adIndicators = [
+        '[data-testid="ads-context-container"]',
+        '[class*="ad"]',
+        '[class*="ads"]',
+        '[class*="commercial"]',
+        '[aria-label*="ad"]',
+        '[aria-label*="commercial"]',
+        'div:contains("Advertisement")',
+        'span:contains("Ad")'
+    ];
+    
+    for (const selector of adIndicators) {
+        const adElement = document.querySelector(selector);
+        if (adElement && adElement.offsetParent !== null) {
+            const nextBtn = document.querySelector('[data-testid="control-button-skip-forward"]');
+            if (nextBtn) {
+                nextBtn.click();
+                console.log('Skipped detected ad element');
+                return;
+            }
+        }
+    }
+    
+    // Method 4: Check for muted/unskippable ads and refresh
+    const playButton = document.querySelector('[data-testid="control-button-playpause"]');
+    if (playButton && playButton.getAttribute('aria-label') === 'Play') {
+        // If player is paused during what should be music, might be stuck ad
+        setTimeout(() => {
+            const nextBtn = document.querySelector('[data-testid="control-button-skip-forward"]');
+            if (nextBtn) nextBtn.click();
+        }, 3000);
+    }
+}
+
+// Method 5: Nuclear option - refresh page on ads (use as last resort)
+function nuclearOption() {
+    const adText = document.body.innerText;
+    if (adText.includes('Advertisement') || adText.includes('Spotify Premium') || 
+        document.title.includes('Advertisement')) {
+        console.log('Ad detected, refreshing...');
+        window.location.reload();
+    }
+}
+
+// Run frequently
+setInterval(skipSpotifyAds, 1000);
+setInterval(nuclearOption, 3000);
+
+// Also try to block ad requests
+const originalFetch = window.fetch;
+window.fetch = function(...args) {
+    if (args[0] && args[0].includes('ads') || args[0] && args[0].includes('commercial')) {
+        console.log('Blocked ad request:', args[0]);
+        return Promise.reject(new Error('Ad request blocked'));
+    }
+    return originalFetch.apply(this, args);
+};
