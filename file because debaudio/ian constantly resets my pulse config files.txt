@@ -1,0 +1,3 @@
+pactl unload-module module-alsa-source
+pactl load-module module-alsa-source device=plughw:2,0 source_name=hyperx_mic
+pactl set-source-volume hyperx_mic 200%
