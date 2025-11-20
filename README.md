@@ -8,7 +8,7 @@ sudo apt install ./path/to/deb.deb
 
 might take a while
 
-sudo apt install caffeine openscad micro python3-full gdebi nemo htop
+sudo apt install caffeine openscad micro python3-full gdebi nemo htop feh
 
 install the discord with gdebi
 
