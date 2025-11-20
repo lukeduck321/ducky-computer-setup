@@ -5,6 +5,8 @@
 # this file and re-run i3-config-wizard(1).
 #
 
+exec feh --bg-fill FILE  /usr/share/images/desktop-base/login-background.svg
+
 exec flameshot
 exec caffeine
 
