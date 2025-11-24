@@ -4,3 +4,8 @@ pactl set-source-volume hyperx_mic 200%
 
 
 pactl load-module module-alsa-source device=hw:0,0 source_name=hyperx_mic
+
+
+pactl unload-module module-alsa-source
+pactl load-module module-alsa-source device=plughw:2,0 source_name=hyperx_mic rate=48000 format=s16le channels=1
+pactl set-source-volume hyperx_mic 200%
