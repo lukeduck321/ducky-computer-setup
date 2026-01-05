@@ -1,0 +1,38 @@
+# i3status configuration file.
+
+general {
+        colors = true
+        interval = 5
+}
+
+order += "wireless _first_"
+order += "ethernet _first_"
+order += "memory"
+order += "battery all"
+order += "tztime local"
+
+wireless _first_ {
+        # Wi-Fi with IPv4 + quality + SSID
+        # Example: W: (78% at MyWifi) 192.168.1.55
+        format_up = "W: (%quality at %essid) %ip"
+        format_down = "W: down"
+}
+
+ethernet _first_ {
+        format_up = "E: up"
+        format_down = "E: down"
+}
+
+memory {
+        format = "%available"
+}
+
+battery all {
+        # Default-style battery: Status | % | remaining time
+        format = "%status: %percentage | %remaining"
+}
+
+tztime local {
+        # Example: Dec 2 | 3:41
+        format = "%b %-d | %-I:%M"
+}
