@@ -8,8 +8,6 @@ micro -plugin install linter
 micro -plugin install autocomplete
 
 
-sudo apt install clangd
-sudo apt install rust-analyzer
-sudo apt install python3-pylsp
+sudo apt install clangd python3-pylsp rust-analyzer
 
 #put settings.json at ~/.config/micro/
