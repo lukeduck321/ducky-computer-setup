@@ -11,3 +11,5 @@ micro -plugin install autocomplete
 sudo apt install clangd
 sudo apt install rust-analyzer
 sudo apt install python3-pylsp
+
+put settings.json at ~/.config/micro/
