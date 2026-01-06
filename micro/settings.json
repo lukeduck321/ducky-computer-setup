@@ -1,0 +1,7 @@
+{
+    "lsp.server": "auto",
+    "linter": true,
+    "autocomplete": true,
+    "diffgutter": true,
+    "hlsearch": true
+}
