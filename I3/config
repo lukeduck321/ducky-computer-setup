@@ -5,6 +5,9 @@
 # this file and re-run i3-config-wizard(1).
 #
 
+exec_always --no-startup-id ~/.config/i3/loop_pngs.sh ~/.config/i3/beamng-steam-background 0.03
+
+
 exec flameshot
 exec caffeine
 
