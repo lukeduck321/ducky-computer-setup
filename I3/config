@@ -12,8 +12,11 @@ font pango:monospace 8
 # AUTOSTART
 #################################
 
-# Animated background (your script)
+# Animated background (with script)
 exec_always --no-startup-id ~/.config/i3/loop_pngs.sh ~/.config/i3/beamng-steam-background 0.01
+
+#non animated background
+#exec feh --bg-fill FILE /usr/share/images/desktop-base/login-background.svg
 
 # Screenshots
 exec --no-startup-id flameshot
