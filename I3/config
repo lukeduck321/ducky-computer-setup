@@ -53,7 +53,6 @@ bindsym $mod+n exec qutebrowser
 bindsym $mod+q exec flameshot gui
 bindsym $mod+d exec dmenu_run
 bindsym $mod+Shift+d exec i3-dmenu-desktop
-bindsym $mod+Shift+p exec --no-startup-id rofi -show power
 
 
 #################################
