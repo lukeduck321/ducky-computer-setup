@@ -204,15 +204,16 @@ bindsym $mod+Shift+e exec \
 #################################
 
 # Accent colour
-set $accent        #ff5a1f
-set $accent_dark   #cc4518
-set $bg            #1e1e1e
+set $accent        #ff8a3c
+set $accent_dark   #9c3f16
+set $bg            #121212
 set $fg            #ffffff
-set $inactive_bg   #2a2a2a
-set $inactive_fg   #888888
+set $inactive_bg   #1f1f1f
+set $inactive_fg   #7a7a7a
+
 
 # Window borders
-client.focused          $accent        $accent        $fg     $accent
+client.focused          $accent_dark	$accent_dark 	$fg		$accent
 client.focused_inactive $inactive_bg   $inactive_bg   $inactive_fg $inactive_bg
 client.unfocused        $inactive_bg   $inactive_bg   $inactive_fg $inactive_bg
 client.urgent           #ff0000        #ff0000        $fg     #ff0000
