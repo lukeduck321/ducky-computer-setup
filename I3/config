@@ -204,8 +204,8 @@ bindsym $mod+Shift+e exec \
 #################################
 
 # Accent colour
-set $accent        #ff8a3c
-set $accent_dark   #9c3f16
+set $accent        #f0742a
+set $accent_dark   #873312
 set $bg            #121212
 set $fg            #ffffff
 set $inactive_bg   #1f1f1f
