@@ -1,4 +1,4 @@
-#generation command ./generate_pngs.sh ../beamng-steam-background.mp4
+#generation command ./generate_pngs.sh beamng-steam-background.mp4
 
 #!/bin/bash
 set -x
