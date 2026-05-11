@@ -1,0 +1,252 @@
+# Edit this configuration file to define what should be installed on
+# your system. Help is available in the configuration.nix(5) man page
+# and in the NixOS manual (accessible by running 'nixos-help').
+
+{ config, pkgs, ... }:
+
+{
+  # BASH CONFIGURATION - Add fastfetch when terminal opens
+  programs.bash = {
+    enable = true;
+    interactiveShellInit = ''
+      fastfetch
+    '';
+  };
+
+  imports =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
+
+  # Raspberry Pi 4 specific bootloader (systemd-boot doesn't work on Pi)
+  boot.loader = {
+    grub.enable = false;
+    generic-extlinux-compatible.enable = true;
+  };
+  
+  # Pi 4 kernel
+  boot.kernelPackages = pkgs.linuxPackages_rpi4;
+
+  networking.hostName = "raspberry-pi";
+  networking.networkmanager.enable = true;
+
+  # Set your time zone (your existing one)
+  time.timeZone = "Australia/Adelaide";
+
+  # Select internationalisation properties.
+  i18n.defaultLocale = "en_AU.UTF-8";
+  i18n.supportedLocales = [ "en_AU.UTF-8/UTF-8" "en_US.UTF-8/UTF-8" ];
+
+  i18n.extraLocaleSettings = {
+    LC_ADDRESS = "en_AU.UTF-8";
+    LC_IDENTIFICATION = "en_AU.UTF-8";
+    LC_MEASUREMENT = "en_AU.UTF-8";
+    LC_MONETARY = "en_AU.UTF-8";
+    LC_NAME = "en_AU.UTF-8";
+    LC_NUMERIC = "en_AU.UTF-8";
+    LC_PAPER = "en_AU.UTF-8";
+    LC_TELEPHONE = "en_AU.UTF-8";
+    LC_TIME = "en_AU.UTF-8";
+  };
+
+  # Enable the X11 windowing system.
+  services.xserver.enable = true;
+  
+  # Raspberry Pi uses modesetting driver (not NVIDIA)
+  services.xserver.videoDrivers = [ "modesetting" ];
+
+  # Enable LXQt desktop environment with i3 as window manager
+  services.displayManager = {
+    sddm.enable = true;  # SDDM display manager
+    defaultSession = "lxqt+i3";  # LXQt with i3 as WM
+  };
+  services.desktopManager.lxqt.enable = true;
+  services.xserver.windowManager.i3.enable = true;
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "au";
+    variant = "";
+  };
+
+  # Enable CUPS to print documents.
+  services.printing.enable = true;
+
+  # Enable sound with pipewire.
+  services.pulseaudio.enable = false;
+  security.rtkit.enable = true;
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
+  # Define user account (same as yours)
+  users.users.ducky = {
+    isNormalUser = true;
+    description = "ducky";
+    extraGroups = [ "networkmanager" "wheel" "video" "render" "audio" "input" ];
+    packages = with pkgs; [];
+  };
+
+  # Auto-login for ducky (optional - comment out if you don't want this)
+  services.displayManager.autoLogin = {
+    enable = true;
+    user = "ducky";
+  };
+
+  # Install firefox.
+  programs.firefox.enable = true;
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
+
+  # System packages - Your packages + LXQt/i3 additions
+  environment.systemPackages = with pkgs; [
+    # Your original packages
+    micro
+    fastfetch
+    freecad
+    discord
+    gnome-tweaks
+    alacritty
+    steam
+    hello
+    gamemode
+    vulkan-tools
+    lutris
+    
+    # LXQt desktop environment
+    lxqt.lxqt-config
+    lxqt.lxqt-panel
+    lxqt.lxqt-session
+    lxqt.lxqt-qtplugin
+    lxqt.lxqt-notificationd
+    lxqt.lxqt-powermanagement
+    lxqt.lxqt-globalkeys
+    lxqt.lxqt-openssh-askpass
+    lxqt.pcmanfm-qt      # File manager
+    lxqt.qterminal       # Terminal emulator
+    
+    # i3 window manager utilities
+    i3status             # Status bar
+    i3lock               # Screen lock
+    dmenu                # Application launcher
+    feh                  # Wallpaper setter
+    picom                # Compositor (transparency/shadows)
+    numlockx             # Numlock control
+    
+    # Additional utilities
+    networkmanagerapplet # Network tray icon
+    pavucontrol          # Audio control
+    alsa-utils           # ALSA tools
+    xclip                # Clipboard utility
+    xorg.xrandr          # Display configuration
+  ];
+
+  system.stateVersion = "25.11";
+
+  # ========== GRAPHICS SETUP for Raspberry Pi ==========
+  
+  # Raspberry Pi firmware and hardware support
+  hardware = {
+    enableRedistributableFirmware = true;
+    raspberry-pi."4".apply-overlays-dtmerge.enable = true;
+  };
+  
+  # Graphics (using vc4 driver on Pi)
+  hardware.graphics = {
+    enable = true;
+    enable32Bit = true;
+  };
+
+  # Steam on Raspberry Pi? Steam doesn't work on ARM architecture
+  # Uncomment only if running x86 emulation (very slow)
+  # programs.steam.enable = false;  # Steam doesn't work on Pi 4 (ARM64)
+  
+  programs.gamemode.enable = true;
+  
+  # ZRAM for better memory management on Pi
+  zramSwap.enable = true;
+  
+  # Console settings
+  console = {
+    enable = true;
+    font = "ter-v16n";
+    keyMap = "us";
+  };
+
+  # Optional: Example i3 config (create ~/.config/i3/config on first login)
+  # Or add a system-wide default config
+  environment.etc."i3/config".text = ''
+    # i3 config for ducky on Raspberry Pi 4
+    set $mod Mod4
+    set $term qterminal
+    set $browser firefox
+    
+    # Font
+    font pango:DejaVu Sans Mono 10
+    
+    # Colors - LXQt friendly
+    client.focused          #4c7899 #285577 #ffffff #2e9ef4 #4c7899
+    client.focused_inactive #333333 #5f676a #ffffff #484e50 #333333
+    client.unfocused        #333333 #222222 #888888 #292d2e #333333
+    client.urgent           #2f343a #900000 #ffffff #900000 #2f343a
+    
+    # Basic bindings
+    bindkey $mod Return exec $term
+    bindkey $mod d exec dmenu_run
+    bindkey $mod Shift q kill
+    bindkey $mod Shift e exec "i3-nagbar -t warning -m 'Exit i3?' -b 'Yes' 'i3-msg exit'"
+    
+    # Focus follows mouse
+    focus_follows_mouse yes
+    
+    # Window movement
+    bindkey $mod j focus left
+    bindkey $mod k focus down
+    bindkey $mod l focus up
+    bindkey $mod semicolon focus right
+    
+    # Resize mode
+    bindkey $mod r mode "resize"
+    mode "resize" {
+        bindkey j resize shrink width 10 px or 10 ppt
+        bindkey k resize grow height 10 px or 10 ppt
+        bindkey l resize shrink height 10 px or 10 ppt
+        bindkey semicolon resize grow width 10 px or 10 ppt
+        bindkey Return mode "default"
+        bindkey Escape mode "default"
+    }
+    
+    # Layout
+    bindkey $mod h split h
+    bindkey $mod v split v
+    bindkey $mod f fullscreen toggle
+    bindkey $mod s layout stacking
+    bindkey $mod w layout tabbed
+    bindkey $mod e layout toggle split
+    
+    # Media keys
+    bindkey XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+    bindkey XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+    bindkey XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+    
+    # Wallpaper
+    exec_always feh --bg-scale /run/current-system/sw/share/backgrounds/lxqt/default.png
+    
+    # Compositor
+    exec picom --experimental-backends &
+    
+    # Status bar
+    bar {
+        status_command i3status
+        position bottom
+        colors {
+            background #000000
+            statusline #ffffff
+        }
+    }
+  '';
+}
